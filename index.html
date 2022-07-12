@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous"
         referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./assets/lib/css/toast.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&display=swap');
     </style>
@@ -128,12 +129,21 @@
                 <div class="clear"></div>
             </div>
         </div>
+        <!-- boss  -->
+        <div class="boss-section ml-32 mr-32" id="boss">
+            <div class="teamMu-heading"><i class="fa-solid fa-hand-holding-heart"></i>
+                Bạn có chắc chắn muốn mua HARRY MÁC HÀI KHÔNG ?</div>
+            <div id="toast">
+                <!-- Toast success -->
+            </div>
+            <div class="container">
+                <div onclick="showSuccessToast()" class="btn btn--success">Xác nhận mua</div>
+                <div onclick="showErrorToast()" class="btn btn--danger">Hủy</div>
+            </div>
+        </div>
     </div>
 
-    <!-- boss  -->
-    <!-- <div class="boss-section" id="boss">
-            <div class="teamMu-heading1">Người quản lý</div>
-        </div> -->
+
     <!-- hành trình vĩ đại mu  -->
     <!-- <div class="hanhtrinh-section" id="hanhtrinh">
             <div class="teamMu-heading2">Hành trình lên đỉnh vinh quang</div>
@@ -157,13 +167,17 @@
 
                 <!-- model content  -->
                 <div class="modal-content">
-                    Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung 
+                    Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br> Thông tin chung <br>
+                    Thông tin chung <br> Thông tin chung <br> Thông tin chung
                 </div>
 
             </div>
         </div>
     </div>
-
+    <!-- toast hiển thị thông báo  -->
+    <div id="toast">
+        <!-- Toast success -->
+    </div>
     <script>
         const info_players = document.querySelectorAll('.js-info-player');
         const modal = document.querySelector('.modal');
@@ -188,6 +202,70 @@
         modalContainer.addEventListener("click", function (even) {
             event.stopPropagation();
         });
+    </script>
+    <script>
+        function showSuccessToast() {
+            toast({
+                title: "Thành công",
+                message: "CLB bạn đã có đội trưởng mác hài trong tay hehe",
+                type: "success",
+                duration: 4000,
+            });
+        }
+        function showErrorToast() {
+            toast({
+                title: "Ngu dốt",
+                message: "Thật buồn, bạn đã bỏ lỡ cơ hội có được đội trưởng mác hài!!!",
+                type: "error",
+                duration: 3000,
+            });
+        }
+        // Toast function
+        function toast({ title = "", message = "", type = "info", duration = 3000 }) {
+            const main = document.getElementById("toast");
+            if (main) {
+                const toast = document.createElement("div");
+
+                // Auto remove toast
+                const autoRemoveId = setTimeout(function () {
+                    main.removeChild(toast);
+                }, duration + 1000);
+
+                // Remove toast when clicked
+                toast.onclick = function (e) {
+                    if (e.target.closest(".toast__close")) {
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+                };
+
+                const icons = {
+                    success: "fas fa-check-circle",
+                    info: "fas fa-info-circle",
+                    warning: "fas fa-exclamation-circle",
+                    error: "fas fa-exclamation-circle",
+                };
+                const icon = icons[type];
+                const delay = (duration / 1000).toFixed(2);
+
+                toast.classList.add("toast", `toast--${type}`);
+                toast.style.animation = `slideInleft ease-in 0.5s, sildeOut linear 1s ${delay}s forwards;`;
+
+                toast.innerHTML = `
+                <div class="toast__icon">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="toast__body">
+                    <h3 class="toast__title">${title}</h3>
+                    <p class="toast__msg">${message}</p>
+                </div>
+                <div class="toast__close">
+                    <i class="fas fa-times"></i>
+                </div>
+            `;
+                main.appendChild(toast);
+            }
+        }
 
     </script>
 </body>
